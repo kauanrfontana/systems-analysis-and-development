@@ -1,0 +1,46 @@
+
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+run {
+    standardInput = System.in
+}
+
+dependencies {
+    testImplementation libs.junit.jupiter
+
+    implementation files('libs/barcode.jar')
+
+    implementation 'org.fusesource.jansi:jansi:2.4.0'
+
+    // https://mvnrepository.com/artifact/com.google.zxing/core
+    implementation 'com.google.zxing:core:3.5.3'
+
+
+    // https://mvnrepository.com/artifact/com.google.zxing/javase
+    implementation 'com.google.zxing:javase:3.5.3'
+
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation libs.guava
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    mainClass = 'ads.poo.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
