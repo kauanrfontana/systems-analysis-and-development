@@ -1,3 +1,6 @@
 <h2>{{lista._nome}}</h2>
 <input type="text" [(ngModel)]="descricao">
 <button (click)="adicionaTarefa()">Nova tarefa</button>
+<section *ngFor="let tarefa of lista._tarefas">
+    <app-tarefa>{{tarefa._descricao}}</app-tarefa>
+</section>

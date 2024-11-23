@@ -12,13 +12,17 @@ export class ControladorTarefaService {
 
   constructor() { }
 
+  public get listaAtual(): ListaTarefa {
+    return this.listas[this.idListaAtual];
+  }
+
   public salvaLista() {
     localStorage.setItem("tarefas", JSON.stringify(this.listas));
   }
 
   public carregaListas(): ListaTarefa[] {
     const listaSalvas = localStorage.getItem("tarefas");
-    return listaSalvas ? JSON.parse(listaSalvas) : this.criarLista('Lista 1');
+    return listaSalvas ? JSON.parse(listaSalvas) : [this.criarLista('Lista 1')];
   }
 
   public criarLista(nome: string): ListaTarefa {
