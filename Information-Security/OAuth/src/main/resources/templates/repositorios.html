@@ -1,0 +1,20 @@
+<html>
+<head>
+    <title>Meus Repositórios do GitHub</title>
+</head>
+<body>
+<h1>Meus Repositórios do GitHub</h1>
+<!-- Verifica se a lista de repositórios está vazia -->
+<div th:if="${#lists.isEmpty(repos)}">
+    <p>Você não possui repositórios ou ocorreu um erro ao buscar seus repositórios.</p>
+</div>
+<p><a href="/">Voltar para a página inicial</a></p>
+<!-- Exibe a lista de repositórios -->
+<ul th:if="${!#lists.isEmpty(repos)}">
+    <li th:each="repo : ${repos}">
+        <a th:href="${repo.html_url}" th:text="${repo.name}"></a>
+        <p th:text="${repo.description}"></p>
+    </li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<html>
+<head>
+    <title>Lab 05 - Autorização</title>
+</head>
+<body>
+<h1>Lab 05 - Autorização</h1>
+<!-- Verifica se o usuário está autenticado -->
+<div th:if="${nome}">
+    <p>Olá, <strong th:text="${nome}"></strong>! Você fez login com sucesso pelo GitHub.
+    <p>Veja seus <a href="/repos">repositórios clicando aqui</a>.
+    <p>Crie um repositório <a href="/criar-repo">repositórios clicando aqui</a>.
+    <p><a href="/logout">Sair</a></p>
+</div>
+<!-- Caso o usuário não esteja autenticado -->
+<div th:if="${nome == null}">
+    <p>Você não está autenticado. Por favor, <a href="/oauth2/authorization/github">faça
+        login com GitHub</a>.</p>
+</div>
+</body>
+</html>
