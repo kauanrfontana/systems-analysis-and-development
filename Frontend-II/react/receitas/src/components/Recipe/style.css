@@ -5,9 +5,13 @@
     border-radius: 10px;
     max-width: 40vw;
     transition: all 0.2s ease;
-    cursor: pointer;
 
     &:hover{
         scale: 1.08;
     }
+}
+
+.rodape {
+    display: flex;
+    justify-content: space-between;
 }
