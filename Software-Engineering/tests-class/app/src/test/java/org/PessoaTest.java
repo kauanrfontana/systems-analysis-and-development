@@ -18,15 +18,12 @@ class PessoaTest {
     }
 
     @Test
-    void getCpf() {
+    void testCpf() {
+        Pessoa p = new Pessoa("Maria", "07021303971");
+        assertTrue(p.isValidCPF(p.getCpf()));
+        Pessoa j = new Pessoa("Maria", "00000000000");
+        assertFalse(j.isValidCPF(j.getCpf()));
     }
 
-    @Test
-    void setCpf() {
-    }
-
-    @Test
-    void isValidCPF(){
-
-    }
+   
 }
