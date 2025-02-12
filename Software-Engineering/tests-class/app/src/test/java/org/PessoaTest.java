@@ -6,15 +6,25 @@ import static org.junit.jupiter.api.Assertions.*;
 class PessoaTest {
 
     @Test
-    void getNome() {
-        Pessoa pessoa = new Pessoa("Nome Sobrenome", "12345678910");
-        assertEquals("Nome Sobrenome", pessoa.getNome());
+    void constructor() {
+        assertThrows(IllegalArgumentException.class, () -> {
+           Pessoa p = new Pessoa("Maria", "");
+        });
+        assertDoesNotThrow(() -> {
+            Pessoa p = new Pessoa("João", "12345678909");
+        });
     }
 
     @Test
     void setNome() {
-        Pessoa pessoa = new Pessoa("Nome Sobrenome", "12345678910");
-        assertNotNull(pessoa.getNome());
+        Pessoa p = new Pessoa("João", "12345678909");
+        assertEquals("João", p.getNome());
+        assertThrows(IllegalArgumentException.class, () -> {
+            p.setNome(null);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            p.setNome("");
+        });
     }
 
     @Test
