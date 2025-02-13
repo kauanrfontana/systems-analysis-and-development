@@ -1,0 +1,12 @@
+.receita-card {
+    margin: 1em;
+    padding: 1em;
+    box-shadow: 2px 2px 4px #ccc;
+    border-radius: 10px;
+    max-width: 40vw;
+}
+
+.rodape {
+    display: flex;
+    justify-content: space-between;
+}
