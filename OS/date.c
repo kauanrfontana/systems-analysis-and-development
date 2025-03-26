@@ -45,22 +45,24 @@ int main()
             break;
     }
 
-    // char suffix;
-    // if(day == 1 || day % 10 == 1) {
-    //     suffix = "st";
-    // }
+    char *suffix;
+    if(day % 10 == 1) {
+        suffix = "st";
+    }
 
-    // if(day == 2 || day % 10 == 2){
-    //     suffix = "nd";
-    // }
+    if(day % 10 == 2){
+        suffix = "nd";
+    }
 
-    // if(day == 3 || day % 10 == 3){
-    //     suffix = "rd";
-    // }
+    if(day % 10 == 3){
+        suffix = "rd";
+    }
 
+    if((day > 3 && day < 21) || !suffix){
+        suffix = "th";
+    }
 
-
-    printf("%s %d%s, %d\n", monthName, day, suffix, year);
+    printf("%s %d%s, %d\n.", monthName, day, suffix, year);
 
     return 0;
 }
