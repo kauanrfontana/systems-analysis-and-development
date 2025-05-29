@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <title>Exemplo sobre WebSocket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+    }
+
+    #messages {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      height: 200px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+      background: #f9f9f9;
+    }
+
+    input,
+    button {
+      font-size: 1rem;
+      padding: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Exemplo sobre WebSocket</h1>
+  <div id="messages">
+    <p>Desconectado do servidor websocket</p>
+    <p>Envie um nome de usuário para se conectar.</p>
+  </div>
+  <input type="text" id="input" placeholder="Digite uma mensagem...">
+  <button onclick="sendMessage()">Enviar</button>
+
+  <script>
+    const messagesDiv = document.getElementById('messages');
+    const input = document.getElementById('input');
+    var nicknameSent = false;
+
+    const ws = new WebSocket('/ws');
+
+    function init(nickname) {
+      ws.onopen = () => {
+        logMessage('Conectado ao servidor WebSocket');
+      };
+
+      ws.onmessage = (event) => {
+        logMessage('Servidor: ' + event.data);
+      };
+
+      ws.onclose = () => {
+        logMessage('Desconectado do servidor websocket');
+      };
+
+      ws.send(nickname);
+      nicknameSent = true;
+    }
+
+    function sendMessage() {
+      const msg = input.value;
+
+      if(!nicknameSent){
+        init(msg)
+        return;
+      }
+      if (msg) {
+        ws.send(msg);
+        logMessage('Você: ' + msg);
+        input.value = '';
+      }
+    }
+
+    function logMessage(message) {
+      const p = document.createElement('p');
+      p.textContent = message;
+      messagesDiv.appendChild(p);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function startServer() {
+      const nickname = input.value
+    }
+  </script>
+
+
+</body>
+
+</html>
