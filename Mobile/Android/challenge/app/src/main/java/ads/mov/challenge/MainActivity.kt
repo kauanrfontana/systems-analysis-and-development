@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +30,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,61 +50,42 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Game(modifier: Modifier = Modifier) {
+fun Game(modifier: Modifier = Modifier, viewModel: DiceViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
     var firstTry by rememberSaveable { mutableStateOf(true) }
-    var faceDice1 by rememberSaveable { mutableStateOf(6) }
-    var faceDice2 by rememberSaveable { mutableStateOf(6) }
-    var gameResult by rememberSaveable { mutableStateOf(-1) }
+    var gameResult by rememberSaveable { mutableStateOf(PossibleResults.NOTHING) }
     var winningSum by rememberSaveable { mutableStateOf(listOf(7, 11)) }
     var losingSum by rememberSaveable { mutableStateOf(listOf(2, 3, 12)) }
-
-    val possibleResults = mapOf<Int, String>(
-        -1 to "",
-        0 to "Você Perdeu ;-;",
-        1 to "Você Venceu :)"
-    )
 
     Surface(
         modifier = modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.statusBars),
-        color = MaterialTheme.colorScheme.inversePrimary
+        color = viewModel.getBackgroundColor()
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Row {
-                Dice(faceDice1)
-                Dice(faceDice2)
+                Dice(uiState.faceDice1)
+                Dice(uiState.faceDice2)
             }
 
-            Text(
-                possibleResults.get(gameResult) ?: "",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = modifier
-            )
+            if(gameResult == PossibleResults.NOTHING) {
+                Text(
+                    viewModel.getButonText(),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = modifier
+                )
+            }
+
             Button (
                 onClick = {
-                    if (gameResult == 1 || gameResult == 0) {
-                        firstTry = true
-                        gameResult = -1
-                        winningSum = listOf(7, 11)
-                        losingSum = listOf(2, 3, 12)
-                    }
-
-                    faceDice1 = (1..6).random()
-                    faceDice2 = (1..6).random()
-                    gameResult = verifyGameResult(faceDice1, faceDice2, winningSum, losingSum)
-
-                    if (firstTry && gameResult > 1) {
-                        winningSum = listOf(gameResult)
-                        losingSum = listOf(7)
-                        firstTry = false
-                    }
+                    viewModel.rollDices()
                 }
             ) {
-                if (gameResult > -1 && gameResult < 2) {
+                if (gameResult == PossibleResults.LOSE || gameResult == PossibleResults.WIN) {
                     Text("Jogar Novamente", fontSize = 24.sp)
                 }else {
                     Text("Jogar", fontSize = 24.sp)
@@ -126,20 +110,6 @@ fun Dice(face: Int, modifier: Modifier = Modifier) {
         painter = painterResource(imagem),
         contentDescription = face.toString()
     )
-}
-
-fun verifyGameResult(faceDice1: Int, faceDice2: Int, winningSum: List<Int>, losingSum: List<Int>): Int {
-    val sum = faceDice1 + faceDice2
-
-    if (winningSum.contains(sum)) {
-        return 1
-    }
-
-    if (losingSum.contains(sum)) {
-        return 0
-    }
-
-    return sum
 }
 
 @Preview(showBackground = true)
